@@ -12,7 +12,6 @@
 --patch      increment the patch version
 """
 
-from pkg_resources import parse_version
 import subprocess
 from docopt import docopt
 import sys
