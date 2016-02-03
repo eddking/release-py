@@ -13,7 +13,6 @@
 """
 
 import subprocess
-from docopt import docopt
 import sys
 import time
 import re
@@ -78,6 +77,9 @@ def _readYN(prompt):
         print "Couldnt parse your response, please answer 'y' or 'n'"
 
 def main():
+    # dont import docopt unless we're actually running main, otherwise we cant use
+    # assert_clean or get_version as part of this project's setup.py (because dependencies haven't been declared yet)
+    from docopt import docopt
     assert_clean()
     args = docopt(__doc__)
     major = args.get('--major')
