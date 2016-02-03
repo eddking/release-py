@@ -96,7 +96,7 @@ def main():
         version[2] = 0
 
     print 'The released version will be: ' + _version_to_string(version)
-    yes = readYN('Is this correct? (y/n)\n')
+    yes = _readYN('Is this correct? (y/n)\n')
 
     if not yes:
         print 'Aborting'
