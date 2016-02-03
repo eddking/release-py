@@ -22,16 +22,24 @@ def assert_clean():
     output = subprocess.check_output(["git", "status", "--porcelain"])
     dirty_files = sum(1 for line in output)
     if dirty_files > 0:
-        print "The repository is not in a clean state. please commit, stash or ignore files before releasing a new version"
+        print "The repository is not in a clean state. please commit, stash or ignore files before continuing"
         sys.exit(1)
 
-def intOrZero(value):
+def get_version():
+    try:
+        output = subprocess.check_output(['git', 'describe'])
+    except:
+        print "could not obtain a version using git describe, maybe you need to tag (release) the project first?"
+        sys.exit(1)
+    return output.strip()
+
+def _intOrZero(value):
     try:
         return int(value)
     except:
         return 0
 
-def get_current_version():
+def _parse_current_version():
     try:
         output = subprocess.check_output(['git', 'describe'])
     except:
@@ -39,16 +47,16 @@ def get_current_version():
         return [0, 0, 0]
     parts = list(parse_version(output))
 
-    major = intOrZero(parts[0])
-    minor = intOrZero(parts[1])
-    patch = intOrZero(parts[2])
+    major = _intOrZero(parts[0])
+    minor = _intOrZero(parts[1])
+    patch = _intOrZero(parts[2])
 
     return [major, minor, patch]
 
-def version_to_string(version):
+def _version_to_string(version):
     return '.'.join([str(num) for num in version])
 
-def readYN(prompt):
+def _readYN(prompt):
     while True:
         val = raw_input(prompt).lower().strip()
         if val == "y":
@@ -78,8 +86,8 @@ def main():
     words = ['major', 'minor', 'patch']
     print 'Releasing a {} version'.format(words[increment])
 
-    version = get_current_version()
-    print 'The current version is: ' + version_to_string(version)
+    version = _parse_current_version()
+    print 'The current version is: ' + _version_to_string(version)
 
     version[increment] = version[increment] + 1
     if increment < 1:
@@ -87,14 +95,14 @@ def main():
     if increment < 2:
         version[2] = 0
 
-    print 'The released version will be: ' + version_to_string(version)
+    print 'The released version will be: ' + _version_to_string(version)
     yes = readYN('Is this correct? (y/n)\n')
 
     if not yes:
         print 'Aborting'
         sys.exit(0)
 
-    version_str = version_to_string(version)
+    version_str = _version_to_string(version)
     print 'Tagging new version'
     command = ['git', 'tag', version_str, '-a', '-m', 'Release ' + version_str + ' ' + time.strftime("%d/%m/%Y %H:%M:%S")]
     print ' '.join(command)
