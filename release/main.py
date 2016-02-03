@@ -17,6 +17,7 @@ import subprocess
 from docopt import docopt
 import sys
 import time
+import re
 
 def assert_clean():
     output = subprocess.check_output(["git", "status", "--porcelain"])
@@ -27,11 +28,23 @@ def assert_clean():
 
 def get_version():
     try:
-        output = subprocess.check_output(['git', 'describe'])
+        output = subprocess.check_output(['git', 'describe', '--first-parent'])
     except:
         print "could not obtain a version using git describe, maybe you need to tag (release) the project first?"
         sys.exit(1)
-    return output.strip()
+    parsed = _parse_version_string(output)
+    if parsed[-1] is None:
+        template = "{}.{}.{}"
+    else:
+        template = "{}.{}.{}.post{}+{}"
+    return template.format(*parsed)
+
+def _parse_version_string(version):
+    #parses the version string from git describe, assumes semantic versioning MAJOR.MINOR.PATCH
+    match = re.match(r'^(\d+)\.(\d+)\.(\d+)(?:-(\d+)-g(.*))?$', version)
+    if match is None:
+        raise Exception('couldnt parse version string: ' + version)
+    return match.groups()
 
 def _intOrZero(value):
     try:
@@ -41,11 +54,11 @@ def _intOrZero(value):
 
 def _parse_current_version():
     try:
-        output = subprocess.check_output(['git', 'describe'])
+        output = subprocess.check_output(['git', 'describe', '--first-parent', '--abbrev=0'])
     except:
         print 'Warning, no current version tag found, assuming this is the first release'
         return [0, 0, 0]
-    parts = list(parse_version(output))
+    parts = list(_parse_version_string(output))
 
     major = _intOrZero(parts[0])
     minor = _intOrZero(parts[1])
