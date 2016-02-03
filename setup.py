@@ -7,6 +7,8 @@ setup(
     name='release',
     version=get_version(),
     packages=['release'],
+    description='a utility for enforcing release process and automating build versioning with git',
+    author='Edmund King',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
