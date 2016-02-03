@@ -3,3 +3,4 @@
 
 venv/
 release.egg-info/
+pip-delete-this-directory.txt
