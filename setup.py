@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 from release import assert_clean, get_version
 
 assert_clean()
