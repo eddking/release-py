@@ -24,6 +24,13 @@ def assert_clean():
         print "The repository is not in a clean state. please commit, stash or ignore files before continuing"
         sys.exit(1)
 
+def assert_unmodified():
+    output = subprocess.check_output(["git", "ls-files", "-m"])
+    dirty_files = sum(1 for line in output)
+    if dirty_files > 0:
+        print "The repository has modifications. please commit, stash or revert them before continuing"
+        sys.exit(1)
+
 def get_version():
     try:
         output = subprocess.check_output(['git', 'describe', '--first-parent'])

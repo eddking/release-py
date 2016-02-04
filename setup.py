@@ -1,7 +1,7 @@
 from setuptools import setup
-from release import assert_clean, get_version
+from release import get_version, assert_unmodified
 
-assert_clean()
+assert_unmodified()
 
 setup(
     name='release',
