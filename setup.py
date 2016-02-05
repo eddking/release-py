@@ -4,7 +4,7 @@ from release import get_version, assert_unmodified, get_released_version
 assert_unmodified()
 
 setup(
-    name='release',
+    name='release-py',
     version=get_version(),
     packages=['release'],
     description='a utility for enforcing release process and automating build versioning with git',
