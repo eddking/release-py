@@ -44,6 +44,9 @@ def get_version():
         template = "{}.{}.{}.post{}+{}"
     return template.format(*parsed)
 
+def get_released_version():
+    return '.'.join(_parse_current_version())
+
 def _parse_version_string(version):
     #parses the version string from git describe, assumes semantic versioning MAJOR.MINOR.PATCH
     match = re.match(r'^(\d+)\.(\d+)\.(\d+)(?:-(\d+)-g(.*))?$', version)
