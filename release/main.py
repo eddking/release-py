@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Usage: release.py
+"""Usage: release
        [--major  | --minor | --patch]
        [--help]
 
