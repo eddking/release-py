@@ -10,6 +10,7 @@ setup(
     description='a utility for enforcing release process and automating build versioning with git',
     author='Edmund King',
     author_email='edmundking2002@yahoo.co.uk',
+    license = "MIT",
     url = 'https://github.com/eddking/release-py',
     download_url = 'https://github.com/eddking/release-py/tarball/' + get_released_version(),
     install_requires=['docopt'],
